@@ -1,0 +1,30 @@
+defaults:
+  - model: transformer_tiny
+  - training: default
+  - preprocessing: default
+  - dataset: wbcic_shu_2c
+  - _self_
+
+# Hydra output dir
+hydra:
+  run:
+    dir: experiments/runs/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: experiments/sweeps/${now:%Y-%m-%d}
+    subdir: ${hydra.job.num}
+
+# Paths
+paths:
+  data_raw: data/raw
+  data_processed: data/processed
+  splits: data/splits/subject_splits.json
+  preprocessor: data/processed/preprocessor.json
+
+# MLflow
+mlflow:
+  experiment_name: neurobridge_default   # override per run: mlflow.experiment_name=eegnet_baseline_2c
+  tracking_uri: sqlite:///experiments/mlruns.db
+
+# DVC
+dvc:
+  pipeline: dvc.yaml
